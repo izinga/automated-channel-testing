@@ -15,7 +15,7 @@
 
 require("log-timestamp");
 const axios = require("axios");
-const BASE_URL = "http://<robustestIP>:<PORT>/roku/v1/session";
+const BASE_URL = "http://robustest.hopto.org:86/roku/v1/session";
 
 class Client {
   constructor(ip, timeout, delay, capability = {}) {
@@ -148,7 +148,7 @@ class Client {
 
       return result;
     } catch (errorResponse) {
-      console.error("Error ", errorResponse);
+      console.error("Unable to requet the API ", url);
       const response = errorResponse.response;
       if (response == undefined) {
         throw new Error("Could not get any response");

@@ -14,55 +14,70 @@
 //////////////////////////////////////////////////////////////////////////
 
 const rokuLibrary = require("../library/rokuLibrary");
-const expect  = require("chai").expect;
-const { spawn } = require('child_process');
+const expect = require("chai").expect;
+const { spawn } = require("child_process");
 
-const childProcess = spawn('D:/projects/go/webDriver/src/main.exe');
+// const childProcess = spawn("D:/projects/go/webDriver/src/main.exe");
 
-let library; 
+let library;
 
-describe('test_basic', () => {
-    before(async function() {
-        this.timeout(50000);
-        library = new rokuLibrary.Library("192.168.2.121");
-        await library.sideLoad("../sample/channel.zip", "rokudev", "aaaa");
+describe("test_basic", () => {
+  before(async function () {
+    this.timeout(50000);
+    let capability = {
+      "robustest.projectID": "60216f98d18e92061d62d04d", //robustest project id
+      "robustest.buildID": "6021701f1245490c024cb0c1", // robustets build id
+      "robustest.jobIdentifier":
+        "Roku Test" + new Date().getHours() + new Date().getMinutes(), // job identifier
+      "robustest.accessKey": "GCxpzzAhTQ7FK2zNhp573mTwams" // access key
+    };
+
+    library = new rokuLibrary.Library("192.168.0.134", 20000, 2000, capability);
+    await library.sideLoad("../sample/channel.zip", "rokudev", "123456");
+  });
+
+  it("should launch the channel", async function () {
+    this.timeout(15000);
+    await library.verifyIsChannelLoaded("dev");
+  });
+
+  it("Check if details screen showed", async function () {
+    this.timeout(30000);
+    await library.sendKey("select", 4);
+    const res = await library.verifyIsScreenLoaded({
+      elementData: [{ using: "text", value: "Barack Gates, Bill Obama" }]
     });
+    expect(res).to.equal(true);
+  });
 
-    it('should launch the channel', async function() { 
-        this.timeout(15000);
-        await library.verifyIsChannelLoaded('dev');
-    });
+  it("Check if playback started", async function () {
+    this.timeout(50000);
+    let res = await library.verifyIsScreenLoaded(
+      { elementData: [{ using: "text", value: "Authenticate to watch" }] },
+      2,
+      2
+    );
+    if (res == true) {
+      await library.sendKey("select");
+      res = await library.verifyIsScreenLoaded({
+        elementData: [{ using: "text", value: "Please enter your username" }]
+      });
+      if (res == false) {
+        expect.fail("Can't enter user name");
+      }
+      await library.sendWord("user");
+      await library.sendKeys(["down", "down", "down", "down", "select"]);
+      await library.sendWord("pass");
+      await library.sendKeys(["down", "down", "down", "down", "select"]);
+    } else {
+      await library.sendKey("select");
+    }
+    res = await library.verifyIsPlaybackStarted();
+    expect(res).to.equal(true);
+  });
 
-    it('Check if details screen showed', async function() { 
-        this.timeout(30000);
-        await library.sendKey('select', 4);
-        const res = await library.verifyIsScreenLoaded({'elementData': [{'using': 'text', 'value': 'Barack Gates, Bill Obama'}]});
-        expect(res).to.equal(true);
-    });
-    
-    it('Check if playback started', async function() { 
-        this.timeout(50000);
-        let res = await library.verifyIsScreenLoaded({'elementData': [{'using': 'text', 'value': 'Authenticate to watch'}]}, 2, 2);
-        if (res == true) {
-            await library.sendKey('select');
-            res = await library.verifyIsScreenLoaded({'elementData': [{'using': 'text', 'value': 'Please enter your username'}]});
-            if (res == false) {
-                expect.fail("Can't enter user name");
-            }
-            await library.sendWord('user');
-            await library.sendKeys(['down', 'down', 'down', 'down', 'select']);
-            await library.sendWord('pass');
-            await library.sendKeys(['down', 'down', 'down', 'down', 'select']);
-        } else {
-            await library.sendKey('select');
-        }
-        res = await library.verifyIsPlaybackStarted();
-        expect(res).to.equal(true);
-    });
-
-    after(async () => {
-        await library.close();
-        childProcess.kill();
-    });
+  after(async () => {
+    await library.close();
+    // childProcess.kill();
+  });
 });
-
