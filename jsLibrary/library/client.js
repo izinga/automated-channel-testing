@@ -134,7 +134,7 @@ class Client {
         url = await this.addSessionId(url);
       }
 
-      if (this.capability["robustest.baseURL"]) {
+      if (this.capability && this.capability["robustest.baseURL"]) {
         const result = await axios({
           method: method,
           url: `${this.capability["robustest.baseURL"]}${url}`,
