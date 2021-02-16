@@ -29,7 +29,8 @@ describe("test_basic", () => {
       "robustest.buildID": "6021701f1245490c024cb0c1", // robustets build id
       "robustest.jobIdentifier":
         "Roku Test" + new Date().getHours() + new Date().getMinutes(), // job identifier
-      "robustest.accessKey": "GCxpzzAhTQ7FK2zNhp573mTwams" // access key
+      "robustest.accessKey": "GCxpzzAhTQ7FK2zNhp573mTwams", // access key,
+      "robustest.baseURL": "http://robustest.hopto.org:86/roku/v1/session"
     };
 
     library = new rokuLibrary.Library("192.168.0.134", 20000, 2000, capability);

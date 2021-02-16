@@ -15,7 +15,6 @@
 
 require("log-timestamp");
 const axios = require("axios");
-const BASE_URL = "http://robustest.hopto.org:86/roku/v1/session";
 
 class Client {
   constructor(ip, timeout, delay, capability = {}) {
@@ -135,18 +134,23 @@ class Client {
         url = await this.addSessionId(url);
       }
 
-      const result = await axios({
-        method: method,
-        url: `${BASE_URL}${url}`,
-        data: body,
-        headers: {
-          ...headers
-        },
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity
-      });
+      if (this.capability["robustest.baseURL"]) {
+        const result = await axios({
+          method: method,
+          url: `${this.capability["robustest.baseURL"]}${url}`,
+          data: body,
+          headers: {
+            ...headers
+          },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity
+        });
 
-      return result;
+        return result;
+      } else {
+        console.error("RobusTest Base URL is missing unable to run test");
+        return;
+      }
     } catch (errorResponse) {
       console.error("Unable to requet the API ", url);
       const response = errorResponse.response;
