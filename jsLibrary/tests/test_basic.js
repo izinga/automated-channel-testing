@@ -14,25 +14,19 @@
 //////////////////////////////////////////////////////////////////////////
 
 const rokuLibrary = require("../library/rokuLibrary");
+const baseCapabilities = require("../library/baseCapabilities");
 const expect = require("chai").expect;
 const { spawn } = require("child_process");
 
 // const childProcess = spawn("D:/projects/go/webDriver/src/main.exe");
 
 let library;
-
+let capability;
 describe("test_basic", () => {
   before(async function () {
     this.timeout(50000);
-    let capability = {
-      "robustest.projectID": "60216f98d18e92061d62d04d", //robustest project id
-      "robustest.buildID": "6021701f1245490c024cb0c1", // robustets build id
-      "robustest.jobIdentifier":
-        "Roku Test" + new Date().getHours() + new Date().getMinutes(), // job identifier
-      "robustest.accessKey": "GCxpzzAhTQ7FK2zNhp573mTwams", // access key,
-      "robustest.baseURL": "http://robustest.hopto.org:86/roku/v1/session"
-    };
-
+    let capabilityClass = new baseCapabilities.baseCapabilities();
+    capability = capabilityClass.getCapability();
     library = new rokuLibrary.Library("192.168.0.134", 20000, 2000, capability);
     await library.sideLoad("../sample/channel.zip", "rokudev", "123456");
   });
