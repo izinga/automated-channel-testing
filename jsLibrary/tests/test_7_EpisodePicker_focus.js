@@ -50,22 +50,14 @@ describe('test_7-EpisodePicker_focus', () => {
     this.timeout(50000);
     let capabilityClass = new baseCapabilities.baseCapabilities();
     capability = capabilityClass.getCapability();
-    capability["robustest.sessionIdentifer"] = "test_6-Encards";
+    capability["robustest.sessionIdentifer"] = "test_7-EpisodePicker_focus";
     //the IP address is ignored in case robustest.baseURL is provided in capabilities
     library = new rokuLibrary.Library("ip address field - do not use", 20000, 2000, capability);
     await library.sideLoad("../channels/7_EpisodePickerScreen.zip", "rokudev", "123456");
   });
 
     it('Check if channel exist on the device', async function() { 
-        this.timeout(5    before(async function () {
-    this.timeout(50000);
-    let capabilityClass = new baseCapabilities.baseCapabilities();
-    capability = capabilityClass.getCapability();
-    capability["robustest.sessionIdentifer"] = "test_6-Encards";
-    //the IP address is ignored in case robustest.baseURL is provided in capabilities
-    library = new rokuLibrary.Library("ip address field - do not use", 20000, 2000, capability);
-    await library.sideLoad("../sample/channel.zip", "rokudev", "123456");
-  });000);
+        this.timeout(5000);
         const apps = await library.getApps();
         const res = library.verifyIsChannelExist(apps, 'dev');
         expect(res).equal(true);

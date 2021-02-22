@@ -31,7 +31,7 @@ describe('test_TimeGridView', () => {
     this.timeout(50000);
     let capabilityClass = new baseCapabilities.baseCapabilities();
     capability = capabilityClass.getCapability();
-    capability["robustest.sessionIdentifer"] = "test_video-preloading";
+    capability["robustest.sessionIdentifer"] = "test_TimeGridView";
     //the IP address is ignored in case robustest.baseURL is provided in capabilities
     library = new rokuLibrary.Library("ip address field - do not use", 20000, 2000, capability);
     await library.sideLoad("../sample/channel.zip", "rokudev", "123456");
