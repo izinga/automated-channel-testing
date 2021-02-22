@@ -14,17 +14,28 @@
 //////////////////////////////////////////////////////////////////////////
 
 const rokuLibrary = require("../library/rokuLibrary");
+const baseCapabilities = require("../library/baseCapabilities");
 const expect  = require("chai").expect;
 const { spawn } = require('child_process');
 
-const childProcess = spawn('D:/projects/go/webDriver/src/main.exe');
+// const childProcess = spawn('D:/projects/go/webDriver/src/main.exe');
 
 let library; 
 
 describe('test_ParagraphView', () => {
-    before(() => {
-        library = new rokuLibrary.Library("192.168.1.64");
-    });
+    //before(() => {
+    //    library = new rokuLibrary.Library("192.168.1.64");
+    //});
+
+before(async function () {
+    this.timeout(50000);
+    let capabilityClass = new baseCapabilities.baseCapabilities();
+    capability = capabilityClass.getCapability();
+    capability["robustest.sessionIdentifer"] = "test_6-Encards";
+    //the IP address is ignored in case robustest.baseURL is provided in capabilities
+    library = new rokuLibrary.Library("ip address field - do not use", 20000, 2000, capability);
+    await library.sideLoad("../sample/channel.zip", "rokudev", "123456");
+  });
 
     it('should launch the channel', async function() { 
         this.timeout(25000);

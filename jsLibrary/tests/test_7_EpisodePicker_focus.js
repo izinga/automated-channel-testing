@@ -14,10 +14,11 @@
 //////////////////////////////////////////////////////////////////////////
 
 const rokuLibrary = require("../library/rokuLibrary");
+const baseCapabilities = require("../library/baseCapabilities");
 const expect  = require("chai").expect;
 const { spawn } = require('child_process');
 
-const childProcess = spawn('D:/projects/go/webDriver/src/main.exe');
+//const childProcess = spawn('D:/projects/go/webDriver/src/main.exe');
 
 const getChildNodesByTag = (node, name) => {
     const children = node.Nodes;
@@ -39,14 +40,32 @@ const getChildNodesByTag = (node, name) => {
 let library; 
 
 describe('test_7-EpisodePicker_focus', () => {
-    before(async function() {
-        this.timeout(20000);
-        library = new rokuLibrary.Library("192.168.2.11");
-        await library.sideLoad("../channels/7_EpisodePickerScreen.zip", "rokudev", "aaaa");
-    });
+    // before(async function() {
+    //     this.timeout(20000);
+    //     library = new rokuLibrary.Library("192.168.2.11");
+    //    await library.sideLoad("../channels/7_EpisodePickerScreen.zip", "rokudev", "aaaa");
+    // });
+
+    before(async function () {
+    this.timeout(50000);
+    let capabilityClass = new baseCapabilities.baseCapabilities();
+    capability = capabilityClass.getCapability();
+    capability["robustest.sessionIdentifer"] = "test_6-Encards";
+    //the IP address is ignored in case robustest.baseURL is provided in capabilities
+    library = new rokuLibrary.Library("ip address field - do not use", 20000, 2000, capability);
+    await library.sideLoad("../channels/7_EpisodePickerScreen.zip", "rokudev", "123456");
+  });
 
     it('Check if channel exist on the device', async function() { 
-        this.timeout(5000);
+        this.timeout(5    before(async function () {
+    this.timeout(50000);
+    let capabilityClass = new baseCapabilities.baseCapabilities();
+    capability = capabilityClass.getCapability();
+    capability["robustest.sessionIdentifer"] = "test_6-Encards";
+    //the IP address is ignored in case robustest.baseURL is provided in capabilities
+    library = new rokuLibrary.Library("ip address field - do not use", 20000, 2000, capability);
+    await library.sideLoad("../sample/channel.zip", "rokudev", "123456");
+  });000);
         const apps = await library.getApps();
         const res = library.verifyIsChannelExist(apps, 'dev');
         expect(res).equal(true);
@@ -129,7 +148,7 @@ describe('test_7-EpisodePicker_focus', () => {
 
     after(async () => {
         await library.close();
-        childProcess.kill();
+       // childProcess.kill();
     });
 });
 
