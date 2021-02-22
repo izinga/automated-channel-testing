@@ -27,6 +27,7 @@ describe("test_basic", () => {
     this.timeout(50000);
     let capabilityClass = new baseCapabilities.baseCapabilities();
     capability = capabilityClass.getCapability();
+    capability["robustest.sessionIdentifer"] = "test_basic";
     library = new rokuLibrary.Library("192.168.0.134", 20000, 2000, capability);
     await library.sideLoad("../sample/channel.zip", "rokudev", "123456");
   });
