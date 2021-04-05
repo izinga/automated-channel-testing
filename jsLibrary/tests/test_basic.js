@@ -28,8 +28,14 @@ describe("test_basic", () => {
     let capabilityClass = new baseCapabilities.baseCapabilities();
     capability = capabilityClass.getCapability();
     capability["robustest.sessionIdentifer"] = "test_basic";
+    console.log("Developer logs added");
     //the IP address is ignored in case robustest.baseURL is provided in capabilities
-    library = new rokuLibrary.Library("ip address field - do not use", 20000, 2000, capability);
+    library = new rokuLibrary.Library(
+      "ip address field - do not use",
+      20000,
+      2000,
+      capability
+    );
     await library.sideLoad("../sample/channel.zip", "rokudev", "123456");
   });
 
@@ -42,7 +48,7 @@ describe("test_basic", () => {
     this.timeout(30000);
     await library.sendKey("select", 4);
     const res = await library.verifyIsScreenLoaded({
-      elementData: [{ using: "text", value: "Barack Gates, Bill Obama" }]
+      elementData: [{ using: "text", value: "Barack Gates, Bill Obama" }],
     });
     expect(res).to.equal(true);
   });
@@ -57,7 +63,7 @@ describe("test_basic", () => {
     if (res == true) {
       await library.sendKey("select");
       res = await library.verifyIsScreenLoaded({
-        elementData: [{ using: "text", value: "Please enter your username" }]
+        elementData: [{ using: "text", value: "Please enter your username" }],
       });
       if (res == false) {
         expect.fail("Can't enter user name");
